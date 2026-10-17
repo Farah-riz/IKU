@@ -8,54 +8,84 @@
   <link rel="stylesheet" href="index.css">
   <script src="index.js" defer></script>
 </head>
-
 <body>
+
   <main class="homepage">
+    <div class="notebook" id="notebook">
 
-    <div class="notebook">
+      <div class="paper-edge"></div>
 
-      <!-- Spiral binding -->
-      <div class="spiral">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-
-      <!-- Notebook cover -->
-      <div class="notebook-cover">
-
-        <div class="cover-border"></div>
-
-        <div class="cover-content">
-          <p class="subtitle">A LITTLE BOOK OF BIG PLANS</p>
-
-          <h1>
-            our little<br>
-            <em>plans.</em>
-          </h1>
-
-          <div class="divider"></div>
-
-          <p class="description">
-            places to go, things to do,<br>
-            memories to make.
-          </p>
-
-          <button id="open-btn" class="open-button">
-            Open notebook →
-          </button>
+      <div class="cover">
+        <div class="spiral">
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
         </div>
 
-        <p class="cover-footer">COLLECT MOMENTS, NOT SCREENSHOTS ✳</p>
+        <!-- Decorative notebook label -->
+        <div class="sticker">
+          <svg class="sticker-outline"
+               viewBox="0 0 400 240"
+               preserveAspectRatio="none"
+               aria-hidden="true">
+            <path d="
+              M 55 12
+              Q 75 24 100 12
+              L 300 12
+              Q 325 24 345 12
+              Q 345 40 385 55
+              L 385 185
+              Q 345 200 345 228
+              Q 325 216 300 228
+              L 100 228
+              Q 75 216 55 228
+              Q 55 200 15 185
+              L 15 55
+              Q 55 40 55 12
+              Z"
+              fill="#E2C7AA"
+              stroke="#242428"
+              stroke-width="5"/>
+            <path d="
+              M 62 24
+              Q 80 35 105 24
+              L 295 24
+              Q 320 35 338 24
+              Q 342 50 373 63
+              L 373 177
+              Q 342 190 338 216
+              Q 320 205 295 216
+              L 105 216
+              Q 80 205 62 216
+              Q 58 190 27 177
+              L 27 63
+              Q 58 50 62 24
+              Z"
+              fill="none"
+              stroke="#242428"
+              stroke-width="1.5"/>
+          </svg>
 
+          <div class="sticker-content">
+            <p class="sticker-small">THE LITTLE BOOK OF</p>
+            <h1>our little<br><em>plans.</em></h1>
+            <div class="sticker-line"></div>
+            <p class="sticker-caption">
+              save it · plan it · live it
+            </p>
+          </div>
+        </div>
+
+        <button id="open-btn" class="open-button">
+          open notebook →
+        </button>
+
+        <span class="cover-detail">VOL. 01 ✳</span>
       </div>
     </div>
 
+    <p class="bottom-caption">your next adventure starts here ✳</p>
   </main>
+
 </body>
 </html>
