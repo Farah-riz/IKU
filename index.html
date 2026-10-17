@@ -4,90 +4,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Our Little Plans</title>
+  <title>our little plans.</title>
   <link rel="stylesheet" href="index.css">
   <script src="index.js" defer></script>
 </head>
 <body>
 
-  <main class="homepage">
-    <div class="notebook" id="notebook">
+  <main class="landing">
 
-      <div class="paper-edge"></div>
+    <p class="top-note">a little book of big plans</p>
 
-      <div class="cover">
-        <div class="spiral">
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
+    <button class="journal" id="open-btn"
+      aria-label="Open our little plans notebook">
+
+      <div class="back-cover"></div>
+      <div class="page-stack"></div>
+      <div class="ribbon"></div>
+
+      <div class="front-cover">
+        <div class="stitching stitching-top"></div>
+        <div class="stitching stitching-bottom"></div>
+
+        <div class="cover-writing">
+          <span class="volume">OUR LITTLE PLANS · VOL. 01</span>
+
+          <h1>
+            PLANS THAT<br>
+            LEAVE THE GC
+          </h1>
+
+          <span class="cover-subtitle">
+            save it · plan it · live it
+          </span>
         </div>
-
-        <!-- Decorative notebook label -->
-        <div class="sticker">
-          <svg class="sticker-outline"
-               viewBox="0 0 400 240"
-               preserveAspectRatio="none"
-               aria-hidden="true">
-            <path d="
-              M 55 12
-              Q 75 24 100 12
-              L 300 12
-              Q 325 24 345 12
-              Q 345 40 385 55
-              L 385 185
-              Q 345 200 345 228
-              Q 325 216 300 228
-              L 100 228
-              Q 75 216 55 228
-              Q 55 200 15 185
-              L 15 55
-              Q 55 40 55 12
-              Z"
-              fill="#E2C7AA"
-              stroke="#242428"
-              stroke-width="5"/>
-            <path d="
-              M 62 24
-              Q 80 35 105 24
-              L 295 24
-              Q 320 35 338 24
-              Q 342 50 373 63
-              L 373 177
-              Q 342 190 338 216
-              Q 320 205 295 216
-              L 105 216
-              Q 80 205 62 216
-              Q 58 190 27 177
-              L 27 63
-              Q 58 50 62 24
-              Z"
-              fill="none"
-              stroke="#242428"
-              stroke-width="1.5"/>
-          </svg>
-
-          <div class="sticker-content">
-            <p class="sticker-small">THE LITTLE BOOK OF</p>
-            <h1>our little<br><em>plans.</em></h1>
-            <div class="sticker-line"></div>
-            <p class="sticker-caption">
-              save it · plan it · live it
-            </p>
-          </div>
-        </div>
-
-        <button id="open-btn" class="open-button">
-          open notebook →
-        </button>
-
-        <span class="cover-detail">VOL. 01 ✳</span>
       </div>
-    </div>
 
-    <p class="bottom-caption">your next adventure starts here ✳</p>
-    <button onclick="localStorage.removeItem('demoUser'); window.location.href='login.html'">
-  Switch User ↗
-</button>
+    </button>
+
+    <p class="open-hint">click the notebook to open ↗</p>
+
   </main>
+
 </body>
 </html>

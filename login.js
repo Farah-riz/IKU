@@ -3,7 +3,7 @@
 const existingUser = localStorage.getItem("demoUser");
 
 if (existingUser) {
-  window.location.replace("hub.html");
+  window.location.replace("calendar.html");
 }
 
 // One-click demo login
@@ -30,6 +30,6 @@ document.querySelectorAll(".user-card").forEach((button) => {
 
     localStorage.setItem("demoUser", JSON.stringify(selectedUser));
 
-    window.location.href = "hub.html";
+    window.location.href = "calendar.html";
   });
 });
