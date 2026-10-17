@@ -1,0 +1,655 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Our Little Plans — Calendar</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --ink: #403832;
+  --paper: #fffdf7;
+  --peach: #e3aa96;
+  --sage: #aec9c4;
+  --mint: #cfe0da;
+  --beige: #e2c7aa;
+  --grey: #e8e6e2;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  background: #e9e9df;
+}
+
+button { font: inherit; cursor: pointer; }
+
+.page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 30px 24px 60px;
+}
+
+.back {
+  color: #766c64;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 20px;
+  margin: 22px 0 26px;
+}
+
+h1, h2, h3 {
+  font-family: 'DM Serif Display', serif;
+  font-weight: 400;
+}
+
+h1 { font-size: clamp(34px, 5vw, 54px); margin: 0; }
+h1 em { color: #ae7d6c; }
+
+.subtitle { color: #82786f; font-size: 13px; }
+
+.week-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 10px 15px;
+  border-radius: 30px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.week-nav button {
+  border: 0;
+  background: #f1ede5;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.paper {
+  background: var(--paper);
+  border: 1px solid #e2d9cd;
+  border-radius: 5px;
+  box-shadow: 5px 6px 0 #dfd3c3, 9px 12px 25px #665d5015;
+}
+
+.sidebar { padding: 26px 20px; }
+
+.small-label {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #a07965;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.sidebar h2 { margin: 9px 0 6px; font-size: 26px; }
+
+.helper {
+  color: #92877e;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.friend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 0;
+  border-bottom: 1px dashed #e5ddd2;
+  cursor: pointer;
+}
+
+.friend input {
+  position: absolute;
+  opacity: 0;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.friend-info { flex: 1; min-width: 0; }
+.friend-info strong { display: block; font-size: 13px; }
+.friend-info small { color: #988d84; font-size: 10px; }
+
+.switch {
+  width: 36px;
+  height: 21px;
+  border-radius: 20px;
+  background: #d5d0ca;
+  padding: 3px;
+  transition: background .25s;
+}
+
+.switch::after {
+  content: "";
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: white;
+  transition: transform .25s;
+}
+
+.friend input:checked ~ .switch { background: #88aaa0; }
+.friend input:checked ~ .switch::after { transform: translateX(15px); }
+.friend:focus-within { outline: 2px solid #91b3af; outline-offset: 3px; }
+
+.legend {
+  margin-top: 24px;
+  display: grid;
+  gap: 12px;
+  font-size: 11px;
+  color: #82786f;
+}
+
+.legend-row { display: flex; align-items: center; gap: 9px; }
+
+.dot { width: 13px; height: 13px; border-radius: 4px; }
+.dot.free { background: var(--mint); }
+.dot.busy { background: #d5d4d2; }
+.dot.match { background: #9acbb3; }
+
+.privacy-note {
+  background: #f3efe7;
+  padding: 13px;
+  border-radius: 8px;
+  margin-top: 25px;
+  color: #81776c;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.calendar-paper {
+  padding: 25px;
+  min-width: 0;
+}
+
+.calendar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  gap: 12px;
+}
+
+.calendar-top h2 { margin: 0; font-size: 26px; }
+.calendar-top span { font-size: 11px; color: #8c8178; }
+
+.calendar-scroll { overflow-x: auto; }
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: 52px repeat(5, minmax(92px, 1fr));
+  min-width: 550px;
+  border-top: 1px solid #e8e0d5;
+  border-left: 1px solid #e8e0d5;
+}
+
+.grid-head, .time-label, .slot {
+  border-right: 1px solid #e8e0d5;
+  border-bottom: 1px solid #e8e0d5;
+}
+
+.grid-head {
+  padding: 13px 4px;
+  text-align: center;
+  background: #f7f3eb;
+}
+
+.grid-head strong { display: block; font-size: 12px; }
+.grid-head small { font-size: 10px; color: #95887c; }
+
+.time-label {
+  font-size: 10px;
+  padding: 9px 5px;
+  color: #9b8f83;
+}
+
+.slot {
+  height: 64px;
+  padding: 5px;
+  background: white;
+  transition: background .35s, transform .2s;
+  position: relative;
+}
+
+.slot.own-free { background: #f1f8f4; }
+.slot.match { background: #ccebd9; }
+.slot.best { background: #a9dfc1; }
+
+.slot:hover { filter: brightness(.97); }
+
+.slot-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+}
+
+.slot-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #487461;
+  text-align: center;
+}
+
+.busy-bar {
+  height: 8px;
+  border-radius: 3px;
+  background: #d4d3d1;
+  animation: slideIn .25s ease both;
+}
+
+.busy-bar.mine { background: #d5a491; }
+
+.slot.best .slot-label {
+  animation: pop .45s ease both;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: scaleX(.4); }
+  to { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes pop {
+  0% { transform: scale(.7); opacity: 0; }
+  65% { transform: scale(1.12); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.results {
+  margin-top: 25px;
+  padding: 23px;
+  background: #fffdf7;
+  border: 1px solid #e3d9cc;
+  border-radius: 5px;
+  box-shadow: 5px 6px 0 #e2c7aa;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.results h2 { margin: 0; font-size: 27px; }
+
+.count {
+  background: #d6eadb;
+  border-radius: 20px;
+  padding: 7px 12px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.result-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.result {
+  border: 1px solid #c4dacb;
+  background: #edf6ee;
+  padding: 13px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  animation: appear .3s ease both;
+}
+
+.result strong { display: block; margin-bottom: 5px; }
+.result small { color: #68806e; }
+
+.result.primary {
+  background: #d3ebd7;
+  border-color: #a8ceb3;
+}
+
+@keyframes appear {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.footer-note {
+  margin-top: 16px;
+  font-size: 11px;
+  color: #94887c;
+}
+
+@media(max-width: 800px) {
+  .layout { grid-template-columns: 1fr; }
+  .header { flex-direction: column; align-items: start; }
+  .page { padding: 20px 14px 50px; }
+  .calendar-paper { padding: 15px; }
+}
+
+@media(prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+<main class="page">
+  <a href="hub.html" class="back">← back to my scrapbook</a>
+
+  <header class="header">
+    <div>
+      <div class="small-label">✳ THE PLANNING CORNER</div>
+      <h1>when are we <em>free?</em></h1>
+      <p class="subtitle">less "when works for you?" more "see you there!" ♡</p>
+    </div>
+
+    <div class="week-nav">
+      <button id="prevWeek" aria-label="Previous week">‹</button>
+      <strong id="weekTitle">This week's availability</strong>
+      <button id="nextWeek" aria-label="Next week">›</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="paper sidebar">
+      <div class="small-label">YOUR PEOPLE</div>
+      <h2>compare calendars</h2>
+      <p class="helper">Toggle your friends to find a time that works for everyone.</p>
+
+      <div id="friendList"></div>
+
+      <div class="legend">
+        <div class="legend-row"><span class="dot free"></span> Your free time</div>
+        <div class="legend-row"><span class="dot busy"></span> Someone is busy</div>
+        <div class="legend-row"><span class="dot match"></span> Everyone selected is free</div>
+      </div>
+
+      <div class="privacy-note">
+        🔒 <strong>Privacy first.</strong>
+        Friends' events appear only as busy blocks. Their event names and details stay hidden.
+      </div>
+    </aside>
+
+    <section class="paper calendar-paper">
+      <div class="calendar-top">
+        <h2>our week together ✿</h2>
+        <span>9am – 5pm · 1-hour slots</span>
+      </div>
+      <div class="calendar-scroll">
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="results">
+    <div class="results-header">
+      <div>
+        <div class="small-label">✦ THE SWEET SPOT</div>
+        <h2>times that work for us</h2>
+      </div>
+      <span class="count" id="matchCount">0 matches</span>
+    </div>
+    <div class="result-list" id="resultList"></div>
+    <p class="footer-note" id="resultNote"></p>
+  </section>
+</main>
+
+<script>
+// DEMO DATA — no external calendar accounts are accessed.
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+const HOURS = [9,10,11,12,13,14,15,16];
+
+const people = [
+  {
+    id: "alex",
+    name: "You (Alex)",
+    source: "My calendar",
+    color: "#e3aa96",
+    free: ["Mon-10","Mon-11","Tue-14","Tue-15","Wed-11","Thu-15","Fri-10"]
+  },
+  {
+    id: "jamie",
+    name: "Jamie",
+    source: "Demo calendar",
+    color: "#e2c7aa",
+    free: ["Mon-10","Mon-11","Tue-14","Wed-11","Thu-15"]
+  },
+  {
+    id: "sam",
+    name: "Sam",
+    source: "Outlook · demo",
+    color: "#aec9c4",
+    free: ["Mon-10","Tue-14","Wed-11","Fri-10"]
+  },
+  {
+    id: "riley",
+    name: "Riley",
+    source: "Calendly · demo",
+    color: "#cbd5ee",
+    free: ["Mon-10","Tue-15","Thu-15","Fri-12"]
+  }
+];
+
+const selected = new Set(["sam","riley"]);
+let weekOffset = 0;
+
+const friendList = document.getElementById("friendList");
+const grid = document.getElementById("calendarGrid");
+const resultList = document.getElementById("resultList");
+const matchCount = document.getElementById("matchCount");
+const resultNote = document.getElementById("resultNote");
+
+function renderFriends() {
+  friendList.innerHTML = "";
+
+  people.forEach((person, index) => {
+    const row = document.createElement("label");
+    row.className = "friend";
+
+    const checked = index === 0 || selected.has(person.id);
+
+    row.innerHTML = `
+      <span class="avatar" style="background:${person.color}">
+        ${person.name === "You (Alex)" ? "A" : person.name[0]}
+      </span>
+      <span class="friend-info">
+        <strong>${person.name}</strong>
+        <small>${person.source}</small>
+      </span>
+      <input type="checkbox" ${checked ? "checked" : ""}
+        ${index === 0 ? "disabled" : ""}>
+      <span class="switch"></span>
+    `;
+
+    if (index !== 0) {
+      const checkbox = row.querySelector("input");
+      checkbox.addEventListener("change", () => {
+        if (checkbox.checked) selected.add(person.id);
+        else selected.delete(person.id);
+        renderCalendar();
+      });
+    }
+
+    friendList.appendChild(row);
+  });
+}
+
+function activePeople() {
+  return people.filter(p => p.id === "alex" || selected.has(p.id));
+}
+
+function isFree(person, slot) {
+  return person.free.includes(slot);
+}
+
+function formatHour(hour) {
+  const suffix = hour >= 12 ? "pm" : "am";
+  const number = hour % 12 || 12;
+  return `${number}${suffix}`;
+}
+
+function getMatches() {
+  const active = activePeople();
+  const matches = [];
+
+  DAYS.forEach(day => {
+    HOURS.forEach(hour => {
+      const slot = `${day}-${hour}`;
+      if (active.every(person => isFree(person, slot))) {
+        matches.push({day, hour, slot});
+      }
+    });
+  });
+
+  return matches;
+}
+
+function renderCalendar() {
+  const active = activePeople();
+  const matches = getMatches();
+  const matchKeys = new Set(matches.map(m => m.slot));
+
+  grid.innerHTML = '<div class="grid-head"></div>';
+
+  DAYS.forEach(day => {
+    const el = document.createElement("div");
+    el.className = "grid-head";
+    el.innerHTML = `<strong>${day}</strong><small>demo week</small>`;
+    grid.appendChild(el);
+  });
+
+  HOURS.forEach(hour => {
+    const time = document.createElement("div");
+    time.className = "time-label";
+    time.textContent = formatHour(hour);
+    grid.appendChild(time);
+
+    DAYS.forEach(day => {
+      const slot = `${day}-${hour}`;
+      const ownFree = isFree(people[0], slot);
+      const everyoneFree = matchKeys.has(slot);
+
+      const cell = document.createElement("div");
+      cell.className = "slot";
+
+      if (ownFree) cell.classList.add("own-free");
+      if (everyoneFree && active.length > 1) cell.classList.add("match");
+      if (everyoneFree && active.length > 2) cell.classList.add("best");
+
+      const inner = document.createElement("div");
+      inner.className = "slot-inner";
+
+      if (everyoneFree && active.length > 1) {
+        const label = document.createElement("span");
+        label.className = "slot-label";
+        label.textContent = "✦ all free!";
+        inner.appendChild(label);
+      } 
+
+      cell.title = `${day} ${formatHour(hour)} — ${
+        everyoneFree ? "Everyone selected is free" : "Not everyone is free"
+      }`;
+
+      cell.appendChild(inner);
+      grid.appendChild(cell);
+    });
+  });
+
+  renderResults(matches);
+}
+
+function renderResults(matches) {
+  matchCount.textContent =
+    `${matches.length} ${matches.length === 1 ? "match" : "matches"}`;
+
+  resultList.innerHTML = "";
+
+  if (matches.length === 0) {
+    resultList.textContent = "No shared free slots this week. Try toggling off a friend ♡";
+  } else {
+    matches.forEach((match, index) => {
+      const card = document.createElement("div");
+      card.className = `result ${index === 0 ? "primary" : ""}`;
+      card.style.animationDelay = `${index * 60}ms`;
+
+      const title = document.createElement("strong");
+      title.textContent = `${index === 0 ? "✦ " : "♡ "}${match.day} · ${formatHour(match.hour)}`;
+
+      const detail = document.createElement("small");
+      detail.textContent = `${formatHour(match.hour)} – ${formatHour(match.hour + 1)} · Everyone free`;
+
+      card.append(title, detail);
+      resultList.appendChild(card);
+    });
+  }
+
+  const names = activePeople().map(p =>
+    p.id === "alex" ? "you" : p.name
+  );
+
+  resultNote.textContent =
+    `Comparing ${names.join(", ")} · Demo availability, not live calendar data.`;
+}
+
+// Week navigation changes the displayed week label.
+// The demo availability template repeats each week.
+function updateWeek() {
+  const monday = new Date(2026, 9, 19);
+  monday.setDate(monday.getDate() + weekOffset * 7);
+
+  const friday = new Date(monday);
+  friday.setDate(friday.getDate() + 4);
+
+  const options = {day:"numeric", month:"short"};
+  document.getElementById("weekTitle").textContent =
+    `${monday.toLocaleDateString("en-GB", options)} – ${friday.toLocaleDateString("en-GB", options)}`;
+
+  renderCalendar();
+}
+
+document.getElementById("prevWeek").addEventListener("click", () => {
+  weekOffset--;
+  updateWeek();
+});
+
+document.getElementById("nextWeek").addEventListener("click", () => {
+  weekOffset++;
+  updateWeek();
+});
+
+renderFriends();
+updateWeek();
+</script>
+</body>
+</html>
