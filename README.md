@@ -1,5 +1,10 @@
 # IKU
 
+
+Imperial Kings UCL Women in STEM Hackathon
+
+Team: Anjika, Farah, Freya
+
 Local demo that extracts event details from a public Instagram reel with Gemini
 and stores confirmed events in Tiger Cloud PostgreSQL.
 

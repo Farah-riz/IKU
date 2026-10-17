@@ -1,0 +1,266 @@
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  --black: #242428;
+  --cream: #D8D7C8;
+  --beige: #E2C7AA;
+  --peach: #E3AA96;
+  --sage: #AEC9C4;
+  --ink: #302B2B;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.homepage {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 40px 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+  background:
+    radial-gradient(circle at 25% 20%, #CFE0DA 0%, transparent 40%),
+    radial-gradient(circle at 85% 85%, #E3AA9655 0%, transparent 40%),
+    var(--cream);
+}
+
+/* NOTEBOOK */
+
+
+.notebook {
+  position: relative;
+  width: min(650px, 85vw);
+  aspect-ratio: 1.45;
+  transform: none;
+  filter: drop-shadow(18px 22px 13px rgba(45, 39, 35, 0.25));
+}
+
+
+/* PAPER EDGE */
+
+.paper-edge {
+  position: absolute;
+  inset: 8px -6px -8px 8px;
+  background: #F6F0E5;
+  border-radius: 8px 22px 22px 8px;
+  box-shadow: 4px 4px 0 #C6BFB1;
+}
+
+/* BLACK TEXTURED COVER */
+
+.cover {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 9px 24px 24px 9px;
+  background-color: var(--black);
+  background-image:
+    repeating-linear-gradient(
+      110deg,
+      rgba(255,255,255,0.045) 0px,
+      rgba(255,255,255,0.045) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    linear-gradient(135deg, #343439, #19191E);
+  box-shadow:
+    inset 8px 0 12px rgba(0,0,0,0.45),
+    inset -3px 0 5px rgba(255,255,255,0.07);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SPIRAL BINDING */
+
+.spiral {
+  position: absolute;
+  left: -19px;
+  top: 7%;
+  height: 86%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  z-index: 5;
+}
+
+.spiral span {
+  width: 40px;
+  height: 14px;
+  border: 4px solid #141416;
+  border-left-color: #55545A;
+  border-radius: 50%;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.45);
+}
+
+/* DECORATIVE STICKER */
+
+.sticker {
+  position: relative;
+  width: 65%;
+  max-width: 400px;
+  aspect-ratio: 400 / 240;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -15px;
+}
+
+.sticker-outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.sticker-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 20px;
+}
+
+.sticker-small {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.sticker h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(30px, 4vw, 49px);
+  font-weight: 400;
+  line-height: 1;
+  margin: 12px 0;
+}
+
+.sticker h1 em {
+  font-weight: 400;
+}
+
+.sticker-line {
+  width: 65%;
+  height: 1px;
+  background: var(--ink);
+  margin: 12px auto;
+}
+
+.sticker-caption {
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+/* BUTTON */
+
+.open-button {
+  margin-top: 15px;
+  background: var(--sage);
+  color: var(--ink);
+  border: none;
+  border-radius: 30px;
+  padding: 13px 26px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.open-button:hover {
+  background: var(--peach);
+  transform: scale(1.05);
+}
+
+.cover-detail {
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  color: #D9D0C5;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+.bottom-caption {
+  color: #665C55;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+
+/* PENCIL CURSOR EVERYWHERE */
+
+@media (pointer: fine) {
+  html, body, body *,
+  button, a, input, .notebook,
+  button:hover, a:hover, .notebook:hover {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg transform='rotate(35 16 16)'%3E%3Crect x='12' y='3' width='8' height='21' rx='1' fill='%23E2C7AA' stroke='%23242428' stroke-width='1.5'/%3E%3Cpath d='M12 24 L16 31 L20 24Z' fill='%23E3AA96' stroke='%23242428' stroke-width='1.2'/%3E%3Cpath d='M15 29 L16 31 L17 29Z' fill='%23242428'/%3E%3Crect x='12' y='1' width='8' height='5' rx='2' fill='%23AEC9C4' stroke='%23242428' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E") 16 30, auto !important;
+  }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .notebook {
+    width: 90vw;
+    aspect-ratio: 1.3;
+  }
+
+  .sticker {
+    width: 80%;
+  }
+
+  .sticker-small {
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+
+  .sticker h1 {
+    font-size: clamp(23px, 7vw, 36px);
+    margin: 7px 0;
+  }
+
+  .sticker-line {
+    margin: 7px auto;
+  }
+
+  .sticker-caption {
+    font-size: 8px;
+  }
+
+  .open-button {
+    margin-top: 10px;
+    padding: 10px 18px;
+    font-size: 11px;
+  }
+
+  .spiral {
+    left: -14px;
+  }
+
+  .spiral span {
+    width: 30px;
+    height: 11px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook, .open-button {
+    transition: none;
+  }
+}
