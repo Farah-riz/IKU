@@ -31,6 +31,6 @@ and stores confirmed events in Tiger Cloud PostgreSQL.
 
 The demo login accepts any valid email and non-empty password. It is not a
 production authentication system. The database table is created on first login.
-Public, downloadable Instagram reels and a working `yt-dlp` installation are
-required for extraction. Gemini must find a clear event name, date, and start
-time; incomplete results are not saved.
+Public, downloadable Instagram posts or reels and a working `yt-dlp`
+installation are required for extraction. Gemini must find a clear event name,
+date, and start time; incomplete results are not saved.

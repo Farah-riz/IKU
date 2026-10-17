@@ -56,35 +56,38 @@ def require_login():
     return email, None
 
 
-def valid_reel_url(url):
+def valid_instagram_url(url):
     return bool(re.match(r"^https?://(www\.)?instagram\.com/(reel|p|tv)/[^/?#]+", url or "", re.IGNORECASE))
 
 
-def download_reel(url, directory):
+def download_instagram_media(url, directory):
     options = {
-        "outtmpl": str(Path(directory) / "reel.%(ext)s"),
-        "format": "best[ext=mp4]/best",
+        "outtmpl": str(Path(directory) / "media.%(ext)s"),
+        "format": "best",
         "noplaylist": True,
         "quiet": True,
         "no_warnings": True,
     }
     with YoutubeDL(options) as downloader:
         downloader.download([url])
-    files = list(Path(directory).glob("reel.*"))
+    files = [
+        path for path in Path(directory).glob("media.*")
+        if path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp", ".mp4", ".mov", ".mkv", ".webm"}
+    ]
     if not files:
-        raise RuntimeError("Instagram did not provide downloadable reel media.")
+        raise RuntimeError("Instagram did not provide downloadable image or video media.")
     return files[0]
 
 
-def extract_event(video_path):
+def extract_event(media_path):
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY is not configured.")
     client = genai.Client(api_key=api_key)
-    uploaded = client.files.upload(file=str(video_path))
-    prompt = """Extract the event advertised in this Instagram reel. Return ONLY valid JSON with exactly:
+    uploaded = client.files.upload(file=str(media_path))
+    prompt = """Extract the event advertised in this Instagram image or video post. Return ONLY valid JSON with exactly:
 {"name": string or null, "date": "YYYY-MM-DD" or null, "time": "HH:MM" 24-hour or null, "timezone": IANA timezone string or null}
-Do not guess missing values. Resolve relative dates using the current date only if the reel provides enough context. The timezone must be null unless explicitly stated or unambiguously indicated."""
+Do not guess missing values. Resolve relative dates using the current date only if the post provides enough context. The timezone must be null unless explicitly stated or unambiguously indicated."""
     response = client.models.generate_content(model=os.environ.get("GEMINI_MODEL", "gemini-2.5-flash"), contents=[uploaded, prompt])
     text = response.text.strip().removeprefix("```json").removesuffix("```").strip()
     try:
@@ -95,7 +98,7 @@ Do not guess missing values. Resolve relative dates using the current date only 
         raise RuntimeError("Gemini returned an invalid event response.")
     required = ("name", "date", "time")
     if any(not isinstance(result.get(key), str) or not result[key].strip() for key in required):
-        raise RuntimeError("The reel did not contain a clear event name, date, and start time.")
+        raise RuntimeError("The Instagram post did not contain a clear event name, date, and start time.")
     try:
         date.fromisoformat(result["date"])
         datetime.strptime(result["time"], "%H:%M")
@@ -148,12 +151,12 @@ def extract():
     if error:
         return error
     url = (request.get_json(silent=True) or {}).get("url", "").strip()
-    if not valid_reel_url(url):
-        return jsonify(error="Enter a valid public Instagram reel URL."), 400
+    if not valid_instagram_url(url):
+        return jsonify(error="Enter a valid public Instagram post, reel, or video URL."), 400
     try:
         with tempfile.TemporaryDirectory() as directory:
-            video = download_reel(url, directory)
-            event = extract_event(video)
+            media = download_instagram_media(url, directory)
+            event = extract_event(media)
         event["source_url"] = url
         return jsonify(event=event)
     except Exception as exception:
