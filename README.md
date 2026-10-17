@@ -1,2 +1,3 @@
 # IKU
-Imperial Kings UCL Hackathon
+Imperial Kings UCL Women in STEM Hackathon
+Team: Anjika, Farah, Freya
