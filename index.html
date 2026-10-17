@@ -1,170 +1,61 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Make It Happen | Plan together</title>
+  <title>Our Little Plans</title>
   <link rel="stylesheet" href="index.css">
   <script src="index.js" defer></script>
 </head>
 
 <body>
+  <main class="homepage">
 
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <a href="#" class="logo">makeithappen<span>.</span></a>
+    <div class="notebook">
 
-    <nav class="nav-links">
-      <a href="#how-it-works">How it works</a>
-      <button class="btn btn-outline" id="login-btn">Log in</button>
-      <button class="btn btn-primary" id="nav-start-btn">Get Started →</button>
-    </nav>
-  </header>
+      <!-- Spiral binding -->
+      <div class="spiral">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
 
-  <main>
+      <!-- Notebook cover -->
+      <div class="notebook-cover">
 
-    <!-- HERO -->
-    <section class="hero">
-      <div class="hero-content">
-        <span class="eyebrow">LESS SCROLLING. MORE DOING.</span>
+        <div class="cover-border"></div>
 
-        <h1>
-          All those places you saved.
-          <span>Let's actually go.</span>
-        </h1>
+        <div class="cover-content">
+          <p class="subtitle">A LITTLE BOOK OF BIG PLANS</p>
 
-        <p class="hero-description">
-          Turn reels, links, and random ideas into real plans.
-          Save places with friends, find a time that works,
-          and make it happen.
-        </p>
+          <h1>
+            our little<br>
+            <em>plans.</em>
+          </h1>
 
-        <div class="hero-actions">
-          <button class="btn btn-primary btn-large" id="hero-start-btn">
-            Start planning →
+          <div class="divider"></div>
+
+          <p class="description">
+            places to go, things to do,<br>
+            memories to make.
+          </p>
+
+          <button id="open-btn" class="open-button">
+            Open notebook →
           </button>
-          <a href="#how-it-works" class="btn btn-text">
-            See how it works ↓
-          </a>
         </div>
 
-        <p class="hero-note">Your next adventure starts with one link.</p>
+        <p class="cover-footer">COLLECT MOMENTS, NOT SCREENSHOTS ✳</p>
+
       </div>
-
-      <!-- HERO PREVIEW -->
-      <div class="hero-visual">
-        <div class="preview-card">
-          <div class="preview-header">
-            <span>✦ weekend plans</span>
-            <span class="preview-members">You + 2 friends</span>
-          </div>
-
-          <div class="preview-input">
-            🔗 Paste a link or add an idea...
-            <span>＋</span>
-          </div>
-
-          <div class="place-card">
-            <div class="place-icon">🏞️</div>
-            <div>
-              <h3>Seven Sisters Hike</h3>
-              <p>📍 East Sussex · Added by Maya</p>
-            </div>
-            <span class="place-heart">♡</span>
-          </div>
-
-          <div class="place-card">
-            <div class="place-icon">🍜</div>
-            <div>
-              <h3>New restaurant to try</h3>
-              <p>📍 London · Added by Sophie</p>
-            </div>
-            <span class="place-heart">♡</span>
-          </div>
-
-          <div class="suggestion">
-            <span>✨ Everyone's free on Saturday!</span>
-            <span>→</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- HOW IT WORKS -->
-    <section class="features" id="how-it-works">
-      <div class="section-heading">
-        <span class="eyebrow">HOW IT WORKS</span>
-        <h2>From "we should go" to "we're going."</h2>
-        <p>Three simple steps. Zero group chat chaos.</p>
-      </div>
-
-      <div class="feature-grid">
-        <article class="feature-card">
-          <div class="feature-icon">🔗</div>
-          <h3>01. Save it</h3>
-          <p>
-            Found something on Instagram, TikTok,
-            YouTube, or anywhere else? Drop the link.
-          </p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">👯</div>
-          <h3>02. Share it</h3>
-          <p>
-            Keep all your ideas in one shared space
-            where everyone can add their favourites.
-          </p>
-        </article>
-
-        <article class="feature-card">
-          <div class="feature-icon">📅</div>
-          <h3>03. Plan it</h3>
-          <p>
-            Compare availability, find a date that
-            works, and finally make those plans happen.
-          </p>
-        </article>
-      </div>
-    </section>
-
-    <!-- FINAL CTA -->
-    <section class="cta-section">
-      <h2>Less "we should." More "we did."</h2>
-      <p>Stop losing great ideas in the group chat.</p>
-      <button class="btn btn-dark" id="bottom-start-btn">
-        Make a plan →
-      </button>
-    </section>
+    </div>
 
   </main>
-
-  <footer>
-    <span class="logo">makeithappen<span>.</span></span>
-    <p>Made for plans that actually happen.</p>
-  </footer>
-
-  <!-- LOGIN MODAL -->
-  <div class="modal-overlay hidden" id="login-modal">
-    <div class="modal">
-      <button class="modal-close" id="close-modal" aria-label="Close">×</button>
-      <h2>Let's get started.</h2>
-      <p>Enter your name to start planning with friends.</p>
-
-      <form id="login-form">
-        <label for="user-name">Your name</label>
-        <input
-          type="text"
-          id="user-name"
-          placeholder="e.g. Alex"
-          required
-        >
-        <button type="submit" class="btn btn-primary btn-large">
-          Continue →
-        </button>
-      </form>
-    </div>
-  </div>
-
 </body>
 </html>
