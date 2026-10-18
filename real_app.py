@@ -35,50 +35,270 @@ PAGE = """
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Event screenshot extractor</title>
+  <title>Save a plan — Event extractor</title>
   <style>
-    :root { font-family: system-ui, sans-serif; color: #242428; background: #f2efe7; }
-    body { margin: 0; }
-    main { width: min(680px, calc(100% - 32px)); margin: 48px auto; }
-    h1 { margin-bottom: 8px; }
-    p { line-height: 1.5; }
-    section { background: white; border: 1px solid #d7d1c5; border-radius: 12px; padding: 24px; margin-top: 20px; }
-    label { display: block; font-weight: 650; margin: 14px 0 6px; }
-    input, button { font: inherit; }
-    input[type=file], input[type=text], input[type=date], input[type=time] { width: 100%; padding: 10px; border: 1px solid #bdb7ad; border-radius: 6px; box-sizing: border-box; }
-    button { margin-top: 16px; padding: 10px 16px; border: 0; border-radius: 6px; background: #aec9c4; cursor: pointer; }
-    button:disabled { opacity: .55; cursor: wait; }
-    .preview { max-width: 100%; max-height: 320px; margin-top: 16px; border-radius: 6px; }
-    .candidate { border-top: 1px solid #e2ded7; padding-top: 16px; margin-top: 16px; }
-    .candidate:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
-    .message { padding: 12px; border-radius: 6px; background: #f7f3e9; }
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
+
+    :root {
+      --ink: #403832;
+      --paper: #fffdf7;
+      --peach: #e3aa96;
+      --sage: #aec9c4;
+      --mint: #cfe0da;
+      --beige: #e2c7aa;
+      --muted: #82786f;
+      --line: #e2d9cd;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      background: #e9e9df;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    [hidden] { display: none !important; }
+
+    .page {
+      width: min(1100px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 30px 0 60px;
+    }
+    .back {
+      color: #766c64;
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      margin: 22px 0 28px;
+    }
+    h1, h2, h3 {
+      font-family: 'DM Serif Display', serif;
+      font-weight: 400;
+    }
+    h1 { font-size: clamp(38px, 6vw, 62px); line-height: 1; margin: 8px 0 12px; }
+    h1 em { color: #ae7d6c; }
+    h2 { font-size: 28px; margin: 0 0 8px; }
+    .small-label {
+      color: #a07965;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .header-note {
+      background: white;
+      border-radius: 30px;
+      color: #82786f;
+      font-size: 12px;
+      padding: 11px 16px;
+      white-space: nowrap;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(250px, .8fr) minmax(0, 1.2fr);
+      gap: 22px;
+      align-items: start;
+    }
+    .paper {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      box-shadow: 5px 6px 0 #dfd3c3, 9px 12px 25px #665d5015;
+    }
+    section { padding: 26px; }
+    .upload-panel { background: #f7f3eb; }
+    .panel-copy { color: var(--muted); font-size: 12px; line-height: 1.6; margin: 0 0 22px; }
+    .drop-zone {
+      background: white;
+      border: 1px dashed #cdbfaf;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    label {
+      color: #6f645b;
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin: 14px 0 7px;
+    }
+    .drop-zone > label:first-child { margin-top: 0; }
+    input[type=file], input[type=text], input[type=date], input[type=time] {
+      background: #fffdf9;
+      border: 1px solid #d7cdc0;
+      border-radius: 6px;
+      color: var(--ink);
+      padding: 11px;
+      width: 100%;
+    }
+    input:focus {
+      border-color: #91b3af;
+      outline: 2px solid #cfe0da;
+      outline-offset: 1px;
+    }
+    input[type=file] { padding: 8px; }
+    button {
+      background: var(--sage);
+      border: 0;
+      border-radius: 6px;
+      color: #304b45;
+      font-weight: 700;
+      margin-top: 17px;
+      padding: 12px 17px;
+      transition: filter .2s, transform .2s;
+    }
+    button:hover { filter: brightness(.96); transform: translateY(-1px); }
+    button:disabled { cursor: wait; opacity: .55; transform: none; }
+    .preview {
+      background: #f7f3eb;
+      border-radius: 6px;
+      display: block;
+      margin-top: 15px;
+      max-height: 270px;
+      max-width: 100%;
+      object-fit: contain;
+      padding: 5px;
+    }
+    .tip {
+      color: #94887c;
+      font-size: 11px;
+      line-height: 1.5;
+      margin: 17px 0 0;
+    }
+    .review-panel { min-width: 0; }
+    .review-heading {
+      align-items: start;
+      display: flex;
+      gap: 12px;
+      justify-content: space-between;
+    }
+    .review-heading h2 { margin-bottom: 0; }
+    .badge {
+      background: #d6eadb;
+      border-radius: 20px;
+      color: #487461;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+    .candidate {
+      border-top: 1px dashed #e1d7ca;
+      margin-top: 20px;
+      padding-top: 18px;
+    }
+    .candidate:first-child { border-top: 0; margin-top: 16px; padding-top: 0; }
+    .candidate-title {
+      align-items: center;
+      display: flex;
+      gap: 9px;
+      margin-bottom: 12px;
+    }
+    .candidate-title label { margin: 0; }
+    .candidate-title input { accent-color: #88aaa0; }
+    .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+    .field-wide { grid-column: 1 / -1; }
+    .message {
+      background: #f3efe7;
+      border-radius: 8px;
+      color: #81776c;
+      font-size: 12px;
+      line-height: 1.5;
+      margin: 16px 0 0;
+      padding: 12px 13px;
+    }
     .error { background: #f9e4de; color: #7c2d1d; }
-    .warning { background: #fff3c4; }
-    [hidden] { display: none; }
+    .warning { background: #fff3c4; color: #715b26; }
+    .save-row {
+      align-items: center;
+      border-top: 1px solid #e8e0d5;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      margin-top: 22px;
+      padding-top: 4px;
+    }
+    .save-row button { margin-top: 16px; }
+
+    @media (max-width: 760px) {
+      .page { padding-top: 20px; width: min(100% - 28px, 600px); }
+      .header { align-items: start; flex-direction: column; gap: 13px; }
+      .header-note { align-self: stretch; text-align: center; }
+      .layout { grid-template-columns: 1fr; }
+      section { padding: 20px; }
+    }
+    @media (max-width: 430px) {
+      .field-grid { grid-template-columns: 1fr; }
+      .field-wide { grid-column: auto; }
+      .save-row { align-items: stretch; flex-direction: column; }
+      .save-row button { width: 100%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Extract an event</h1>
-    <p>Upload a PNG screenshot of an event post. Review the extracted details before saving.</p>
+  <main class="page">
+    <a href="calendar.html" class="back">← back to the planning corner</a>
 
-    <section>
-      <form id="upload-form">
-        <label for="screenshot">PNG screenshot</label>
-        <input id="screenshot" name="screenshot" type="file" accept="image/png" required>
-        <img id="preview" class="preview" alt="Screenshot preview" hidden>
-        <button id="extract-button" type="submit">Extract details</button>
-      </form>
-      <p id="upload-message" class="message" hidden></p>
-    </section>
+    <header class="header">
+      <div>
+        <div class="small-label">✳ THE EVENT SCRAPBOOK</div>
+        <h1>save a plan <em>for later.</em></h1>
+        <p class="subtitle">Turn a screenshot from the group chat into a calendar-ready event. ♡</p>
+      </div>
+      <div class="header-note">✦ review before it goes in the diary</div>
+    </header>
 
-    <section id="results" hidden>
-      <h2>Review details</h2>
-      <p id="timezone-warning" class="message warning" hidden></p>
-      <div id="candidates"></div>
-      <button id="save-button" type="button">Save selected event</button>
-      <p id="save-message" class="message" hidden></p>
-    </section>
+    <div class="layout">
+      <section class="paper upload-panel">
+        <div class="small-label">STEP ONE</div>
+        <h2>bring the invite</h2>
+        <p class="panel-copy">Upload a clear PNG screenshot of the event post. We'll find the date, time, and name for you.</p>
+        <div class="drop-zone">
+          <form id="upload-form">
+            <label for="screenshot">PNG screenshot</label>
+            <input id="screenshot" name="screenshot" type="file" accept="image/png" required>
+            <img id="preview" class="preview" alt="Screenshot preview" hidden>
+            <button id="extract-button" type="submit">✦ extract details</button>
+          </form>
+        </div>
+        <p class="tip">Your screenshot is used only to read the event details. Nothing is saved until you confirm it.</p>
+        <p id="upload-message" class="message" hidden></p>
+      </section>
+
+      <section id="results" class="paper review-panel" hidden>
+        <div class="review-heading">
+          <div>
+            <div class="small-label">STEP TWO</div>
+            <h2>check the details</h2>
+          </div>
+          <span class="badge">ready to save</span>
+        </div>
+        <p class="subtitle">Choose an option if we found more than one, then make any little edits before saving.</p>
+        <p id="timezone-warning" class="message warning" hidden></p>
+        <div id="candidates"></div>
+        <div class="save-row">
+          <button id="save-button" type="button">♡ save this event</button>
+          <p id="save-message" class="message" hidden></p>
+        </div>
+      </section>
+    </div>
   </main>
   <script>
     const form = document.querySelector("#upload-form");
@@ -118,15 +338,28 @@ PAGE = """
     function renderCandidates() {
       candidates.innerHTML = extractedCandidates.map((event, index) => `
         <div class="candidate">
-          <label><input type="radio" name="candidate" value="${index}" ${index === 0 ? "checked" : ""}> Candidate ${index + 1}</label>
-          <label for="name-${index}">Event name</label>
-          <input id="name-${index}" data-field="name" data-index="${index}" type="text" value="${escapeHtml(event.name)}" required>
-          <label for="date-${index}">Date</label>
-          <input id="date-${index}" data-field="date" data-index="${index}" type="date" value="${escapeHtml(event.date)}" required>
-          <label for="time-${index}">Start time</label>
-          <input id="time-${index}" data-field="time" data-index="${index}" type="time" value="${escapeHtml(event.time)}" required>
-          <label for="timezone-${index}">Timezone</label>
-          <input id="timezone-${index}" data-field="timezone" data-index="${index}" type="text" value="${escapeHtml(event.timezone || "Europe/London")}" required>
+          <div class="candidate-title">
+            <input id="candidate-${index}" type="radio" name="candidate" value="${index}" ${index === 0 ? "checked" : ""}>
+            <label for="candidate-${index}">Candidate ${index + 1}</label>
+          </div>
+          <div class="field-grid">
+            <div class="field-wide">
+              <label for="name-${index}">Event name</label>
+              <input id="name-${index}" data-field="name" data-index="${index}" type="text" value="${escapeHtml(event.name)}" required>
+            </div>
+            <div>
+              <label for="date-${index}">Date</label>
+              <input id="date-${index}" data-field="date" data-index="${index}" type="date" value="${escapeHtml(event.date)}" required>
+            </div>
+            <div>
+              <label for="time-${index}">Start time</label>
+              <input id="time-${index}" data-field="time" data-index="${index}" type="time" value="${escapeHtml(event.time)}" required>
+            </div>
+            <div class="field-wide">
+              <label for="timezone-${index}">Timezone</label>
+              <input id="timezone-${index}" data-field="timezone" data-index="${index}" type="text" value="${escapeHtml(event.timezone || "Europe/London")}" required>
+            </div>
+          </div>
         </div>
       `).join("");
       results.hidden = false;
