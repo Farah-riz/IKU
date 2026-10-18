@@ -1,12 +1,18 @@
+/* FONTS */
+
 @font-face {
   font-family: "Astoria";
   src: url("Astoria.otf") format("opentype");
+  font-weight: normal;
 }
 
 @font-face {
   font-family: "Shareit";
   src: url("shareit.otf") format("opentype");
+  font-weight: normal;
 }
+
+/* RESET */
 
 * {
   margin: 0;
@@ -14,194 +20,159 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* BACKGROUND */
 
 body {
-  background: #f7f3ea;
-  color: #3e352f;
-  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  margin: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.4),
+      rgba(255, 255, 255, 0.4)
+    ),
+    url("checkered.avif");
+
+  background-size: auto, 100px auto;
+  background-repeat: repeat;
+  background-position: center;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
-}
+/* HOMEPAGE */
 
-/* HEADER */
-
-header {
-  max-width: 1300px;
-  margin: auto;
-  padding: 30px 6%;
+.homepage {
+  position: relative;
+  min-height: 100vh;
 
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+
+  overflow: hidden;
 }
 
-.logo {
-  font-family: "Astoria", Georgia, serif;
-  font-size: 30px;
-  color: #b98270;
-}
 
-nav {
-  display: flex;
-  gap: 35px;
-  align-items: center;
-}
-
-nav a {
-  font-size: 14px;
-}
-
-nav a:hover {
-  color: #b98270;
-}
-
-/* HERO */
-
-.hero {
-  max-width: 1300px;
-  min-height: 75vh;
-  margin: auto;
-  padding: 60px 6%;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 50px;
-}
-
-.hero-text {
-  flex: 1;
-  max-width: 550px;
-}
-
-.eyebrow {
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: #b98270;
-  font-weight: bold;
-}
-
-.hero h1 {
-  font-family: Georgia, serif;
-  font-size: clamp(42px, 5vw, 76px);
-  line-height: 1.12;
-  margin: 25px 0;
-  font-weight: normal;
-}
-
-.hero h1 em {
-  color: #b98270;
-}
-
-.hero-text p {
-  font-size: 16px;
-  line-height: 1.8;
-  color: #74665b;
-  max-width: 430px;
-  margin-bottom: 35px;
-}
-
-/* BUTTON */
-
-.start-btn {
-  display: inline-block;
-  background: #b98270;
-  color: white;
-  padding: 15px 28px;
-  font-size: 14px;
-
-  transition: background 0.2s;
-}
-
-.start-btn:hover {
-  background: #986b5b;
-}
-
-/* NOTEBOOK */
+/* CLICKABLE NOTEBOOK */
 
 .notebook {
   position: relative;
   display: block;
-  flex: 1;
-  max-width: 600px;
 
-  transition: transform 0.3s ease;
+  width: min(900px, 90vw);
+
+  z-index: 1;
+  cursor: pointer;
+
+  text-decoration: none;
+  color: inherit;
+
+  transition:
+    transform 0.3s ease,
+    filter 0.3s ease;
 }
+
+/* NOTEBOOK HOVER */
 
 .notebook:hover {
-  transform: translateY(-8px) rotate(-2deg);
+  transform: translateY(-10px) scale(1.02);
+  filter: drop-shadow(0 15px 18px rgba(65, 35, 20, 0.2));
 }
 
-.notebook img {
-  display: block;
+.notebook:active {
+  transform: scale(0.98);
+}
+
+.notebook:focus-visible {
+  outline: 3px solid #6b3e2e;
+  outline-offset: 6px;
+}
+
+/* NOTEBOOK IMAGE */
+
+.notebook-image {
   width: 100%;
   height: auto;
+  display: block;
 }
+
+/* NOTEBOOK TEXT */
 
 .notebook-text {
   position: absolute;
+
   top: 50%;
   left: 55%;
+
   transform: translate(-50%, -50%);
 
   width: 60%;
   text-align: center;
+
   color: #4b2d1b;
+
   pointer-events: none;
 }
 
-.notebook-text h2 {
+/* TITLE */
+
+.notebook-text h1 {
   font-family: "Astoria", Georgia, serif;
-  font-size: clamp(32px, 4vw, 65px);
+
+  font-size: clamp(42px, 6vw, 105px);
   font-weight: normal;
+  letter-spacing: 2px;
 }
+
+/* SUBTITLE */
 
 .notebook-text p {
   font-family: "Shareit", cursive;
-  font-size: clamp(13px, 2vw, 25px);
+
+  font-size: clamp(16px, 2.8vw, 38px);
+  font-weight: normal;
+
   white-space: nowrap;
 }
 
-.notebook-text span {
+/* BOW */
+
+.bow {
   display: block;
-  margin-top: 15px;
-  font-size: 28px;
+
+  margin-top: 18px;
+  font-size: 35px;
 }
 
-/* HOW IT WORKS */
+/* MOBILE */
 
-.how-it-works {
-  text-align: center;
-  padding: 100px 20px;
-  background: #eee7dc;
+@media (max-width: 600px) {
+
+  .notebook {
+    width: 95vw;
+  }
+
+  .notebook-text h1 {
+    font-size: clamp(30px, 8vw, 50px);
+  }
+
+  .notebook-text p {
+    font-size: clamp(12px, 3vw, 20px);
+  }
+
+  .bow {
+    margin-top: 8px;
+    font-size: 24px;
+  }
+
 }
 
-.how-it-works h2 {
-  font-family: Georgia, serif;
-  font-size: clamp(30px, 4vw, 50px);
-  font-weight: normal;
-  margin: 20px 0;
+@media (prefers-reduced-motion: reduce) {
+  .notebook {
+    transition: none;
+  }
+
+  .notebook:hover,
+  .notebook:active {
+    transform: none;
+  }
 }
-
-.how-it-works p {
-  max-width: 500px;
-  margin: 0 auto 25px;
-  line-height: 1.8;
-  color: #74665b;
-}
-
-.how-it-works a {
-  color: #b98270;
-  border-bottom: 1px solid #b98270;
-  padding-bottom: 5px;
-}
-
-/* FOOTER */
-
-footer
