@@ -10,8 +10,8 @@ const defaultFree = [
 
 const people = [
   {
-    id: "alex",
-    name: "You (Alex)",
+    id: "farah",
+    name: "You (Farah)",
     source: "My calendar",
     color: "#e3aa96",
     free: [...defaultFree]
@@ -55,8 +55,8 @@ const savedSuggestions = [
     day: null
   },
   {
-    name: "Honest Burgers Holborn",
-    detail: "Free fries on Monday 19th · demo offer",
+    name: "IKU Celebratory Brunch",
+    detail: "celebrate winning the IKU Hackathon with a brunch at Frankie and Benny's",
     day: "Mon"
   },
   {
@@ -67,7 +67,7 @@ const savedSuggestions = [
   }
 ];
 
-const selected = new Set(["sam", "riley"]);
+const selected = new Set(["farah", "liz"]);
 
 let weekOffset = 0;
 let currentMatch = null;
