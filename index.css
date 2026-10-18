@@ -11,8 +11,6 @@
 }
 
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
 
@@ -22,13 +20,13 @@ body {
   color: var(--ink);
 }
 
-.homepage {
+/* HOMEPAGE */
+
+.landing {
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 40px 25px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   gap: 40px;
   background:
@@ -51,7 +49,26 @@ body {
 
 /* PAPER EDGE */
 
-.paper-edge {
+.page-stack {
+  position: absolute;
+  inset: 6px -9px -10px 5px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #f4ebdc 0px,
+    #f4ebdc 2px,
+    #c7b8a2 3px,
+    #f8f1e7 4px
+  );
+  border-radius: 5px 10px 12px 5px;
+  box-shadow:
+    3px 3px 0 #f8f1e7,
+    5px 5px 0 #bba993,
+    7px 7px 0 #f8f1e7;
+}
+
+/* FABRIC BOOKMARK */
+
+.ribbon {
   position: absolute;
   inset: 8px -6px -8px 8px;
   background: #F6F0E5;
@@ -85,9 +102,9 @@ body {
   justify-content: center;
 }
 
-/* SPIRAL BINDING */
+/* STITCHING */
 
-.spiral {
+.stitching {
   position: absolute;
   left: -19px;
   top: 7%;
@@ -259,8 +276,19 @@ body {
   }
 }
 
+/* ACCESSIBILITY */
+
 @media (prefers-reduced-motion: reduce) {
   .notebook, .open-button {
     transition: none;
+  }
+}
+
+/* PENCIL CURSOR */
+
+@media (pointer: fine) {
+  html, body, body *,
+  button, button:hover {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cg transform='rotate(35 16 16)'%3E%3Crect x='12' y='3' width='8' height='21' rx='1' fill='%23E2C7AA' stroke='%23242428' stroke-width='1.5'/%3E%3Cpath d='M12 24 L16 31 L20 24Z' fill='%23E3AA96' stroke='%23242428' stroke-width='1.2'/%3E%3Cpath d='M15 29 L16 31 L17 29Z' fill='%23242428'/%3E%3Crect x='12' y='1' width='8' height='5' rx='2' fill='%23AEC9C4' stroke='%23242428' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E") 16 30, auto !important;
   }
 }
