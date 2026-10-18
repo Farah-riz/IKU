@@ -21,7 +21,15 @@ DEMO_USERS = {
     "alex": {"id": "alex", "name": "Alex", "avatar": "A"},
     "sam": {"id": "sam", "name": "Sam", "avatar": "S"},
 }
-ASSETS = {"index.css", "login.css", "calendar.css", "index.js", "login.js", "calendar.js"}
+ASSETS = {
+    "index.css",
+    "login.css",
+    "calendar.css",
+    "index.js",
+    "login.js",
+    "calendar.js",
+    "notebook.png",
+}
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS events (
