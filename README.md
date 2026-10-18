@@ -24,7 +24,7 @@ and stores confirmed events in Tiger Cloud PostgreSQL.
 3. Start the server:
 
    ```powershell
-   python -m flask --app app run
+   python -m flask --app real_app run
    ```
 
 4. Open http://127.0.0.1:5000.

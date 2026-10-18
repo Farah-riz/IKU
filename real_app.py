@@ -7,15 +7,21 @@ from pathlib import Path
 
 import psycopg
 from dotenv import load_dotenv
-from flask import Flask, jsonify, render_template_string, request
+from flask import Flask, jsonify, redirect, render_template_string, request, send_from_directory, session
 from google import genai
 
 ROOT = Path(__file__).parent
 load_dotenv(ROOT / ".env")
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=None)
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "local-demo-secret-change-me")
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 DEFAULT_TIMEZONE = "Europe/London"
+DEMO_USERS = {
+    "alex": {"id": "alex", "name": "Alex", "avatar": "A"},
+    "sam": {"id": "sam", "name": "Sam", "avatar": "S"},
+}
+ASSETS = {"index.css", "login.css", "calendar.css", "index.js", "login.js", "calendar.js"}
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS events (
@@ -254,7 +260,7 @@ PAGE = """
 </head>
 <body>
   <main class="page">
-    <a href="calendar.html" class="back">← back to the planning corner</a>
+    <a href="/calendar" class="back">← back to the planning corner</a>
 
     <header class="header">
       <div>
@@ -410,7 +416,10 @@ PAGE = """
         });
         const body = await response.json();
         if (!response.ok) throw new Error(body.error || "Could not save event.");
-        showMessage(saveMessage, "Event saved.");
+        showMessage(saveMessage, "Event saved. Opening your calendar…");
+        window.setTimeout(() => {
+          window.location.href = "/calendar";
+        }, 500);
       } catch (error) {
         showMessage(saveMessage, error.message, true);
       } finally {
@@ -518,13 +527,74 @@ def validate_event(body):
     return name, event_date, event_time, timezone
 
 
+def logged_in_user():
+    user_id = session.get("user_id")
+    return DEMO_USERS.get(user_id)
+
+
+def require_login():
+    if not logged_in_user():
+        return jsonify(error="Please log in first."), 401
+    return None
+
+
+@app.get("/assets/<path:filename>")
+def asset(filename):
+    if filename not in ASSETS:
+        return jsonify(error="Asset not found."), 404
+    return send_from_directory(ROOT, filename)
+
+
 @app.get("/")
 def index():
+    return send_from_directory(ROOT, "index.html")
+
+
+@app.get("/login")
+def login_page():
+    return send_from_directory(ROOT, "login.html")
+
+
+@app.get("/add-event")
+def add_event_page():
+    if not logged_in_user():
+        return redirect("/login")
     return render_template_string(PAGE)
+
+
+@app.get("/calendar")
+def calendar_page():
+    if not logged_in_user():
+        return redirect("/login")
+    return send_from_directory(ROOT, "calendar.html")
+
+
+@app.get("/api/session")
+def current_session():
+    return jsonify(user=logged_in_user())
+
+
+@app.post("/api/login")
+def login():
+    body = request.get_json(silent=True) or {}
+    user = DEMO_USERS.get(body.get("user_id"))
+    if not user:
+        return jsonify(error="Choose Alex or Sam to continue."), 400
+    session["user_id"] = user["id"]
+    return jsonify(user=user)
+
+
+@app.post("/api/logout")
+def logout():
+    session.clear()
+    return jsonify(ok=True)
 
 
 @app.post("/api/extract")
 def extract():
+    error = require_login()
+    if error:
+        return error
     upload = request.files.get("screenshot")
     if not upload or not upload.filename:
         return jsonify(error="Choose a PNG screenshot."), 400
@@ -541,8 +611,37 @@ def extract():
         return jsonify(error=f"Could not extract event details: {error}"), 422
 
 
+@app.get("/api/events")
+def events():
+    error = require_login()
+    if error:
+        return error
+    try:
+        ensure_schema()
+        with psycopg.connect(database_url()) as connection:
+            rows = connection.execute(
+                "SELECT name, event_date, event_time, timezone "
+                "FROM events ORDER BY event_date, event_time"
+            ).fetchall()
+        return jsonify(events=[
+            {
+                "name": row[0],
+                "date": row[1].isoformat(),
+                "time": row[2].strftime("%H:%M"),
+                "timezone": row[3],
+            }
+            for row in rows
+        ])
+    except Exception:
+        app.logger.exception("Event listing failed")
+        return jsonify(error="The database is unavailable."), 503
+
+
 @app.post("/api/events")
 def save_event():
+    error = require_login()
+    if error:
+        return error
     try:
         name, event_date, event_time, timezone = validate_event(request.get_json(silent=True))
         ensure_schema()

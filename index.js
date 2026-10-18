@@ -1,11 +1,15 @@
 
 const openButton = document.getElementById("open-btn");
 
-openButton.addEventListener("click", () => {
-  window.location.href = "login.html";
-});
+if (openButton) {
+  openButton.addEventListener("click", () => {
+    window.location.href = "/login";
+  });
+}
 
 function switchUser() {
-  localStorage.removeItem("demoUser");
-  window.location.href = "login.html";
+  fetch("/api/logout", {method: "POST"})
+    .finally(() => {
+      window.location.href = "/login";
+    });
 }
